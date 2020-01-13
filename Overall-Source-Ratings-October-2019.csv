@@ -6,7 +6,6 @@ source,Bias,Quality
 ABC,-1.85,49.47
 Al Jazeera,-3.71,46.63
 Alternet,-19.16,21.4
-"American Spectator, The",23.89,22
 AP,-1.06,51.98
 Axios,-5.74,47.36
 BBC,-3.03,46.56
@@ -56,7 +55,7 @@ MSNBC,-4.12,47.35
 MSNBC,-10,42.47
 MSNBC,-20.87,31.82
 National Enquirer,5.41,9.65
-National Public Radio,-2.73,49.9
+NPR,-2.73,49.9
 National Review,16.23,26.36
 NBC,0,0
 New Republic,-12.82,36.43
@@ -85,7 +84,8 @@ Slate,-18.47,31.12
 Spoutable,15.5,14.79
 Talking Points Memo,-5.67,41.96
 The Advocate,-20.21,32.01
-The American Conservative,10.82,28.65
+American Conservative,10.82,28.65
+American Spectator,23.89,22
 The Atlantic,-6.41,40.16
 The Blaze,15.7,27.34
 The Economist,-2.43,42.34
