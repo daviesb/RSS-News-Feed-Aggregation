@@ -14,7 +14,8 @@ import sys
 sys.path.append('/home/daviesb/Documents/viz.news-scripts')
 from RSS import RSS
 import LDA
-#from FTP import FTP_Connect
+# from SQL import sql_insert
+# from FTP import FTP_Connect
         
 
 ### list of sources and RSS feeds, init an RSS object for each
@@ -97,6 +98,11 @@ for feed in rss_feed:
     df_temp = pd.DataFrame({'source': feed.source, 'title':titles, 'link':links, 'published':published, 'author':authors, 'summary':summaries})
     df_rss = pd.concat([df_rss, df_temp], sort=False)
     
+### source-specific edits
+df_rss.reset_index(drop=True, inplace=True) # reset index to make dropping rows easier
+# remove articles from RCP's feed that are from other sources
+df_rss.drop(df_rss[(df_rss.source == 'RealClearPolitics') & (df_rss.author.str.contains('RCP|RealClearPolitics') == False)].index, inplace=True)
+
 
 ### These sources seem to have their published date in EST/EDT, while anything not listed is in GMT:
 time_adjust = [  
@@ -198,7 +204,7 @@ df_rss['css_fill'], df_rss['css_text'], df_rss['css_link_text'] = zip(*df_rss.ap
 
 ### function to truncate long summaries
 def truncate(text):
-    return (text[:320] + '...') if len(text) > 300 else text
+    return (text[:300] + '...') if len(text) > 300 else text
 
 df_rss.summary = df_rss.summary.apply(truncate)
 
@@ -236,22 +242,28 @@ today = datetime.datetime.today() + datetime.timedelta(hours=4)
 timestamp = today.strftime('Last updated at %H:%M GMT on %b %d, %Y')
 with open('/home/daviesb/Documents/viz.news/txt/timestamp.txt', 'w') as text_file:
     text_file.write(timestamp)
-
-
-#FTP_Connect()
-
-
-# ## connecting to FTP and autouploading files
-# from ftplib import FTP_TLS
-# import ssl
-# import time
-
-
-
+    
+    
+    
 print('The average bias is ' + str(round(df_rss.Bias.mean(), 2)) + ', where negative is more liberal')
 print('{0:.0%}'.format(df_rss.Bias[df_rss.Bias < 0].count() / df_rss.Bias.count()) + ' of sources are left of center')
 
 
 
+#### auto upload to FTP
+# try:
+#     FTP_Connect()
+# except:
+#     print("FTP error")
 
-### sql code
+
+#### auto insert into mariadb
+# try:
+#     sql_insert(df_rss)
+# except:
+#     print("SQL error")
+
+
+
+
+

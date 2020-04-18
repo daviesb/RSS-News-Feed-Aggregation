@@ -98,6 +98,10 @@ def get_topics(df, num_topics):
         df_temp = pd.DataFrame(lda_model.top_topics(corpus)[num_topic][0], columns=('Score', 'Word'))
         df_temp['Topic'] = num_topic
         df_topics = df_topics.append(df_temp, ignore_index=True)
+    ### exclude words that come up often but are not included in stopwords dictionary
+    exclude = ['new', 'could', 'need', 'say', 'calls', 'help', 'get', 'stay', 'despite', 'says', 'would', 'show', 'gets', 'things', \
+               'stop', 'amid', 'people', 'name', 'cases', 'us']
+    df_topics = df_topics[df_topics['Word'].isin(exclude) == False]
         
         
     ### this while loop extracts the top X words (one form each topic), based on num_topics
