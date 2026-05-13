@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jan 20 16:24:10 2020
-
-
 """
 
 import feedparser

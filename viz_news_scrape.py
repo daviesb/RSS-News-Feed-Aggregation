@@ -2,18 +2,17 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Nov 11 20:39:50 2019
-
-
-
 """
 
+import os
 import pandas as pd
 import json
 import datetime
 import sys
-sys.path.append('path/to/your/data/Documents/viz.news-scripts')
 from RSS import RSS
 import LDA
+
+BASE_DIR = 'path/to/your/data'  # Set this to your local data directory
 # from SQL import sql_insert
 # from FTP import FTP_Connect
         
@@ -139,7 +138,7 @@ df_rss.loc[df_rss['source'].isin(time_adjust), 'published'] = (pd.to_datetime(df
 
 
 ### import bias and quality ratings from AdFontes Media
-df_bias = pd.read_csv('path/to/your/data/Documents/viz.news/sources/bd_sources.csv')
+df_bias = pd.read_csv(os.path.join(BASE_DIR, 'sources', 'bd_sources.csv'))
 #df_bias = df_bias[df_bias.Quality >= 21]
 df_bias['bias_normalized'] = (df_bias.Bias - df_bias.Bias.mean()) / df_bias.Bias.std() # normalized bias scores
 df_bias['bias_minmax'] = (df_bias.Bias - df_bias.Bias.min()) / (df_bias.Bias.max() - df_bias.Bias.min()) # 0/1 min max scores
@@ -224,23 +223,23 @@ df_rss, topics = LDA.get_topics(df_rss, num_topics=4)
 
 
 ### save topics to txt file
-with open('path/to/your/data/Documents/viz.news/txt/topics.txt', 'w') as text_file:
+with open(os.path.join(BASE_DIR, 'txt', 'topics.txt'), 'w') as text_file:
     text_file.write(str(topics))
 
 ### save json files
 json_rss = df_rss.to_json(orient='records')
 json_to_ftp = json.dumps(json_rss)
 
-with open('path/to/your/data/Documents/viz.news/json/rss_records.json', 'w') as json_file:
+with open(os.path.join(BASE_DIR, 'json', 'rss_records.json'), 'w') as json_file:
     json.dump(json_rss, json_file)
 
-df_rss.to_json('path/to/your/data/Documents/viz.news/json/rss.json')
+df_rss.to_json(os.path.join(BASE_DIR, 'json', 'rss.json'))
 
 
 
 today = datetime.datetime.today() + datetime.timedelta(hours=4)
 timestamp = today.strftime('Last updated at %H:%M GMT on %b %d, %Y')
-with open('path/to/your/data/Documents/viz.news/txt/timestamp.txt', 'w') as text_file:
+with open(os.path.join(BASE_DIR, 'txt', 'timestamp.txt'), 'w') as text_file:
     text_file.write(timestamp)
     
     
